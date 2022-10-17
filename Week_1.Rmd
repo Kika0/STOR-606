@@ -1,5 +1,5 @@
 ---
-title: "Week_1"
+#title: "Week_1"
 output: word_document
 date: "2022-10-17"
 ---
@@ -8,27 +8,25 @@ date: "2022-10-17"
 knitr::opts_chunk$set(echo = TRUE)
 library(here)
 source(here("Tandem.R"))
+# run Tandem with given arguments
+Waits <- Tandem(Starting.seed = 12345,c=c(1,1),Tend=50)
 ```
 
 ## Week 1 Assessment
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
 ### Average queue time
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+Average queue time is `r mean(Waits$Waits1)` and `r mean(Waits$Waits2)` for queues 1 and 2 respectively.
 
 ### Plot Waiting times
 
+```{r}
+plot(1:length(Waits$Waits1),Waits$Waits1)
+plot(1:length(Waits$Waits2),Waits$Waits2)
+```
+
 ### Record Sample Path
 
+```{r}
+Tandem(Starting.seed = 12345,c=c(1,1),Tend=50)
+```
