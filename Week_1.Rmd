@@ -16,13 +16,14 @@ Waits <- Tandem(Starting.seed = 12345,c=c(1,1),Tend=50)
 
 ### Average queue time
 
-Average queue time is `r mean(Waits$Waits1)` and `r mean(Waits$Waits2)` for queues 1 and 2 respectively.
+Average queue time is `r round(mean(Waits$Waits1),2)` and `r round(mean(Waits$Waits2),2)` for queues 1 and 2 respectively.
 
 ### Plot Waiting times
 
+Green dots represent points with zero waiting time.
 ```{r}
-plot(1:length(Waits$Waits1),Waits$Waits1)
-plot(1:length(Waits$Waits2),Waits$Waits2)
+plot(1:length(Waits$Waits1),Waits$Waits1,col = ifelse(Waits$Waits1 == 0,'olivedrab3','lightcoral'))
+plot(1:length(Waits$Waits2),Waits$Waits2,col = ifelse(Waits$Waits1 == 0,'olivedrab3','lightcoral'))
 ```
 
 ### Record Sample Path
