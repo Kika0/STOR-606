@@ -1,0 +1,26 @@
+---
+title: "Week_3"
+output: pdf_document
+date: "2022-10-30"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Q1
+
+Simulate (s,S) inventory system.
+
+```{r}
+
+```
+
+# Q2
+
+Calculate MSER statistic in the tandem queue system.
+
+```{r}
+
+```
+
