@@ -17,8 +17,8 @@ for (x in 1:10) {
 dest[x] <- MSER(AR1(mu=200, phi=phi, sigma=sigma,Y0=y0, m=2000))$d
 }
 
-# plot(dOptimal-dest)
-# report average dest
-mean(dest)
-# report sd dest
-sd(dest)
+dOptimal
+# report bias
+mean(dest)-dOptimal
+# report relative variability
+sd(dest)/dOptimal
