@@ -6,15 +6,41 @@ date: "2022-10-30"
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+source("Week_3.R")
 ```
 
 # Q1
 
-Simulate (s,S) inventory system.
+Simulate (s,S) inventory system using the calling sequence below.
 
 ```{r}
+set.seed(12345)
+Y <- MySim(123, 2000, 55555)
 
+### calculate 95% confidence intervals for point estimates
+# mean
+mean_95 <- c(mean(Y) + qnorm(0.975)*sd(Y)/length(Y),mean(Y) - qnorm(0.975)*sd(Y)/length(Y))
+# 80% quantile
+l_hat <- floor(length(Y)*0.8 - qnorm(0.975)*sqrt(length(Y)*0.8*(1-0.8)))
+u_hat <- ceiling(length(Y)*0.8 + qnorm(0.975)*sqrt(length(Y)*0.8*(1-0.8)))
+# prob Y>=210
+prob_95 <- (length(Y)/(length(Y)-1))*sum(Y>=210)/length(Y)*(1-sum(Y>=210)/length(Y))
 ```
+
+Using 2000 replications, the estimates are:
+
+-   mean: `r mean(Y)`
+
+-   standard deviation: `r sd(Y)`
+
+-   80th percentile of average cost: `r quantile(Y,probs=c(0.8))`
+
+-   probability that cost is greater than or equal to \$210: `r sum(Y>=210)/length(Y)`
+
+-   95% confidence intervals on your point estimates:
+    - mean: (`r mean_95`)
+    - 80th percentile: $[Y_{(1564)},Y_{(1636)}]$
+    - probability that cost is greater than or equal to \$210: ???
 
 # Q2
 
@@ -23,4 +49,3 @@ Calculate MSER statistic in the tandem queue system.
 ```{r}
 
 ```
-

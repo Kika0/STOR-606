@@ -35,5 +35,5 @@ MySim <- function(x, n=1, RandomSeed=-1){
     }
     Y[j] <- Cost/30
   }
-  -Y
+  Y
 }
