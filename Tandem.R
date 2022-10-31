@@ -115,7 +115,7 @@ Tandem <- function(Starting.seed, c, Tend){
   
   while(NextEvent != "EndSimulation"){
     NextEvent <- TimerQ()
-    print(c(Clock, NextEvent)) # uncomment for basic event trace
+#    print(c(Clock, NextEvent)) # uncomment for basic event trace
     switch(NextEvent,
            Arrival1 = Arrival1(FALSE),
            Arrival2 = Arrival2(),           

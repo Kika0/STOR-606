@@ -6,7 +6,14 @@ date: "2022-10-30"
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-source("Week_3.R")
+library(here)
+library(tidyverse)
+# function to simulate (s,S) inventory system
+source(here("Week_3.R"))
+# function to generate tandem queue waiting times from Week_1
+source(here("Tandem.R"))
+# MSER function
+source(here("AllCode2022.R"))
 ```
 
 # Q1
@@ -42,10 +49,67 @@ Using 2000 replications, the estimates are:
     - 80th percentile: $[Y_{(1564)},Y_{(1636)}]$
     - probability that cost is greater than or equal to \$210: ???
 
-# Q2
+# Q2: MSER statistic in the tandem queue system
 
-Calculate MSER statistic in the tandem queue system.
+(a)
+
+Generate queue 1 and 2 waiting times with c(1,1) servers and probbaility 0.3 of skipping second queue.
+
+```{r echo=FALSE}
+set.seed(12345)
+# run Tandem with given arguments
+Waits <- Tandem(Starting.seed = 12345,c=c(1,1),Tend=500)
+```
+
+Estimate deletion points.
 
 ```{r}
+mser_q1 <- MSER(Waits$Waits1)
+mser_q2 <- MSER(Waits$Waits2)
+
+dEstimated_q1 <- mser_q1$d
+dEstimated_q2 <- mser_q2$d
+```
+ 
+The estimate of optimal number of waiting times to delete is `r dEstimated_q1` for queue 1 and `r dEstimated_q2` for queue 2.
+```{r}
+df_q1 <- mser_q1 %>% as_tibble() %>% select(MSER) %>% rowid_to_column()
+df_q2 <- mser_q2 %>% as_tibble() %>% select(MSER) %>% rowid_to_column()
+```
+
+```{r fig.cap="Plot of MSER statistic for queue 1."}
+# {plot(1:length(mser_q1$MSER),mser_q1$MSER,type="l") 
+# abline(v=dEstimated_q1,col="firebrick")
+# text(x=320,y=0.1,label="deletion point estimate")}
+
+# use ggplot instead to make nicer
+ggplot(df_q1) + geom_line(aes(x=rowid,y=MSER)) +
+  geom_vline(xintercept = dEstimated_q1,col="firebrick") +
+  annotate("text", x=dEstimated_q1-30, y=0.07, label="deletion point", angle=90, size=3, color="firebrick") +
+  theme_minimal() 
+
 
 ```
+
+```{r fig.cap="Plot of MSER statistic for queue 2."}
+# use ggplot instead to make nicer
+ggplot(df_q2) + geom_line(aes(x=rowid,y=MSER)) + geom_vline(xintercept = dEstimated_q2,col="firebrick") +
+  annotate("text", x=dEstimated_q2-30, y=0.2, label="deletion point", angle=90, size=3, color="firebrick") +
+  theme_minimal() 
+```
+
+(b)
+```{r}
+set.seed(12345)
+# run Tandem with given arguments
+Waits <- Tandem(Starting.seed = 12345,c=c(1,1),Tend=5000)
+mser_q1 <- MSER(Waits$Waits1)
+mser_q2 <- MSER(Waits$Waits2)
+
+dEstimated_q1 <- mser_q1$d
+dEstimated_q2 <- mser_q2$d
+```
+
+The estimate of optimal number of waiting times to delete is `r dEstimated_q1` for queue 1 and `r dEstimated_q2` for queue 2.
+As there is more information (larger sample), the estimate can be more confident.
+
