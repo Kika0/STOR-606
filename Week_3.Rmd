@@ -26,12 +26,14 @@ Y <- MySim(123, 2000, 55555)
 
 ### calculate 95% confidence intervals for point estimates
 # mean
-mean_95 <- c(mean(Y) + qnorm(0.975)*sd(Y)/length(Y),mean(Y) - qnorm(0.975)*sd(Y)/length(Y))
+mean_95 <- c(mean(Y) - qnorm(0.975)*sd(Y)/length(Y),mean(Y) + qnorm(0.975)*sd(Y)/length(Y))
 # 80% quantile
 l_hat <- floor(length(Y)*0.8 - qnorm(0.975)*sqrt(length(Y)*0.8*(1-0.8)))
 u_hat <- ceiling(length(Y)*0.8 + qnorm(0.975)*sqrt(length(Y)*0.8*(1-0.8)))
 # prob Y>=210
-prob_95 <- (length(Y)/(length(Y)-1))*sum(Y>=210)/length(Y)*(1-sum(Y>=210)/length(Y))
+s_2 <- (length(Y)/(length(Y)-1))*sum(Y>=210)/length(Y)*(1-sum(Y>=210)/length(Y))
+prob_95 <- c( sum(Y>=210)/length(Y)- qnorm(0.975)*sqrt(s_2)/length(Y),
+              sum(Y>=210)/length(Y)+ qnorm(0.975)*sqrt(s_2)/length(Y))
 ```
 
 Using 2000 replications, the estimates are:
@@ -47,7 +49,7 @@ Using 2000 replications, the estimates are:
 -   95% confidence intervals on your point estimates:
     - mean: (`r mean_95`)
     - 80th percentile: $[Y_{(1564)},Y_{(1636)}]$
-    - probability that cost is greater than or equal to \$210: ???
+    - probability that cost is greater than or equal to \$210: (`r prob_95`)
 
 # Q2: MSER statistic in the tandem queue system
 
@@ -56,7 +58,6 @@ Using 2000 replications, the estimates are:
 Generate queue 1 and 2 waiting times with c(1,1) servers and probbaility 0.3 of skipping second queue.
 
 ```{r echo=FALSE}
-set.seed(12345)
 # run Tandem with given arguments
 Waits <- Tandem(Starting.seed = 12345,c=c(1,1),Tend=500)
 ```
@@ -100,7 +101,6 @@ ggplot(df_q2) + geom_line(aes(x=rowid,y=MSER)) + geom_vline(xintercept = dEstima
 
 (b)
 ```{r}
-set.seed(12345)
 # run Tandem with given arguments
 Waits <- Tandem(Starting.seed = 12345,c=c(1,1),Tend=5000)
 mser_q1 <- MSER(Waits$Waits1)
@@ -111,5 +111,5 @@ dEstimated_q2 <- mser_q2$d
 ```
 
 The estimate of optimal number of waiting times to delete is `r dEstimated_q1` for queue 1 and `r dEstimated_q2` for queue 2.
-As there is more information (larger sample), the estimate can be more confident.
+As there is more information (larger sample), the estimate can be more confident. Since we used the same starting seed, getting same deletion point for sequences of different length is likely (as it so happened in this case of deletion point in local minimum).
 
