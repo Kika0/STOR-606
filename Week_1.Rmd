@@ -23,7 +23,7 @@ Average queue time is `r round(mean(Waits$Waits1),2)` and `r round(mean(Waits$Wa
 Green dots represent points with zero waiting time.
 ```{r}
 plot(1:length(Waits$Waits1),Waits$Waits1,col = ifelse(Waits$Waits1 == 0,'olivedrab3','lightcoral'))
-plot(1:length(Waits$Waits2),Waits$Waits2,col = ifelse(Waits$Waits1 == 0,'olivedrab3','lightcoral'))
+plot(1:length(Waits$Waits2),Waits$Waits2,col = ifelse(Waits$Waits2 == 0,'olivedrab3','lightcoral'))
 ```
 
 ### Record Sample Path
